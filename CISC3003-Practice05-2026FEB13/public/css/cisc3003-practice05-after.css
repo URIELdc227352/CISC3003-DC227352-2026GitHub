@@ -1,0 +1,102 @@
+body, header, div, p, h1, h2, h3, h4 {
+   margin: 0;
+    padding: 0;
+    font-family: "Open Sans", "Arial", sans-serif;
+}
+h1, h2, h3, h4 {
+    font-family: 'Merriweather', "Times New Roman", serif;
+}
+header h1, header h2 {
+    color: white;
+}
+header h1 {
+    font-size: 48px;
+}
+header h2 {
+    font-size: 36px;
+}
+
+header {
+    position: relative;
+    width: 100%;
+}
+.banner {
+    width: 100%;
+    display: block;
+}
+.banner--title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    text-align: center;
+}
+header span {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 24px;
+    width: 160px;
+    padding: 9px;
+    border: solid 1px white;
+}
+header span a {
+    color: white;
+    text-decoration: none;
+}
+article {
+    padding: 20px;
+}
+.highlights {
+    overflow: hidden; 
+    margin-bottom: 30px;
+}
+.highlights h2 {
+    border-bottom: 2px solid #333;
+    margin-bottom: 10px;
+}
+.highlights--container {
+    float: left; 
+    width: 48%;
+    margin-right: 2%;
+}
+.highlights--media img {
+    float: left; 
+    width: 150px;
+    margin-right: 15px;
+}
+.highlights--button {
+    float: right;
+    background-color: #f39c12;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.mosaic {
+    position: relative;
+    height: 1000px;  
+    margin-top: 20px;
+}
+.mosaic-item {
+    position: absolute;
+}
+.mosaic-item img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.mosaic--a { top: 0; left: 0; width: 500px; height: 390px; }
+.mosaic--b { top: 0; left: 510px; width: 180px; height: 190px; }
+.mosaic--c { top: 200px; left: 510px; width: 180px; height: 190px; }
+.mosaic--d { top: 0; left: 700px; width: 285px; height: 390px; } 
+.mosaic--e { top: 400px; left: 0; width: 285px; height: 390px; }
+.mosaic--f { top: 400px; left: 295px; width: 285px; height: 190px; }
+.mosaic--g { top: 400px; left: 590px; width: 285px; height: 190px; }
+.mosaic--h { top: 400px; left: 885px; width: 100px; height: 390px; }
+.mosaic--j { top: 600px; left: 295px; width: 580px; height: 390px; }
+header span a:link, header span a:visited {
+    color: white;
+}
+     
+
