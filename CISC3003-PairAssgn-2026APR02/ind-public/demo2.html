@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Canvas Portfolio - Project 2 Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .control-group {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-item {
+            text-align: center;
+        }
+
+        .control-item label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .slider {
+            width: 150px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #00ffff;
+            cursor: pointer;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .control-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .stats {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="cisc3003-IndAssgn-projects.html" class="back-btn">← Back to Projects</a>
+
+    <div class="container">
+        <canvas id="canvas"></canvas>
+
+        <div class="content">
+            <div class="header">
+                <h1>HTML5 Canvas Portfolio</h1>
+                <p>Interactive animations powered by HTML5 Canvas and JavaScript</p>
+            </div>
+
+            <div class="controls">
+                <h2>Animation Controls</h2>
+
+                <div class="control-group">
+                    <div class="control-item">
+                        <label for="speed">Animation Speed</label>
+                        <input type="range" id="speed" class="slider" min="0.1" max="3" step="0.1" value="1">
+                    </div>
+                    <div class="control-item">
+                        <label for="particles">Particle Count</label>
+                        <input type="range" id="particles" class="slider" min="10" max="200" step="10" value="50">
+                    </div>
+                    <div class="control-item">
+                        <label for="size">Particle Size</label>
+                        <input type="range" id="size" class="slider" min="1" max="10" step="1" value="3">
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="btn" onclick="resetAnimation()">Reset Animation</button>
+                    <button class="btn" onclick="toggleAnimation()">
+                        <span id="toggleText">Pause</span> Animation
+                    </button>
+                    <button class="btn" onclick="changeColor()">Change Colors</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="fps">60</div>
+                    <div class="stat-label">FPS</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="particles-count">50</div>
+                    <div class="stat-label">Particles</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="render-time">0</div>
+                    <div class="stat-label">ms Render</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const speedSlider = document.getElementById('speed');
+        const particlesSlider = document.getElementById('particles');
+        const sizeSlider = document.getElementById('size');
+        const fpsDisplay = document.getElementById('fps');
+        const particlesCount = document.getElementById('particles-count');
+        const renderTime = document.getElementById('render-time');
+        const toggleText = document.getElementById('toggleText');
+
+        let particles = [];
+        let animationId;
+        let isAnimating = true;
+        let lastTime = 0;
+        let frameCount = 0;
+        let fps = 60;
+
+        // Color schemes
+        const colorSchemes = [
+            ['#00ffff', '#ff00ff', '#ffff00', '#ff6b6b'],
+            ['#4ecdc4', '#44a08d', '#096148', '#4ecdc4'],
+            ['#ff6b6b', '#ee5a24', '#f7931e', '#ff6b6b'],
+            ['#a8e6cf', '#dcedc8', '#ffd3a5', '#ffaaa5']
+        ];
+        let currentColorScheme = 0;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = parseInt(particlesSlider.value);
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    size: Math.random() * 5 + 1,
+                    color: colorSchemes[currentColorScheme][Math.floor(Math.random() * colorSchemes[currentColorScheme].length)],
+                    life: Math.random() * 100 + 50
+                });
+            }
+
+            particlesCount.textContent = particleCount;
+        }
+
+        function updateParticles(deltaTime) {
+            const speed = parseFloat(speedSlider.value);
+            const maxSize = parseFloat(sizeSlider.value);
+
+            particles.forEach((particle, index) => {
+                // Update position
+                particle.x += particle.vx * speed;
+                particle.y += particle.vy * speed;
+
+                // Bounce off walls
+                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+                // Update size based on slider
+                particle.size = (particle.size / 5) * maxSize;
+
+                // Update life
+                particle.life -= deltaTime * 0.1;
+                if (particle.life <= 0) {
+                    // Respawn particle
+                    particle.x = Math.random() * canvas.width;
+                    particle.y = Math.random() * canvas.height;
+                    particle.life = Math.random() * 100 + 50;
+                }
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw connections between nearby particles
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw particles
+            particles.forEach(particle => {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+
+                // Add glow effect
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = particle.color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+        }
+
+        function animate(currentTime) {
+            if (!isAnimating) return;
+
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+
+            // Calculate FPS
+            frameCount++;
+            if (frameCount % 60 === 0) {
+                fps = Math.round(1000 / deltaTime);
+                fpsDisplay.textContent = fps;
+            }
+
+            const startTime = performance.now();
+            updateParticles(deltaTime);
+            drawParticles();
+            const endTime = performance.now();
+
+            renderTime.textContent = Math.round(endTime - startTime);
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function resetAnimation() {
+            initParticles();
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+            toggleText.textContent = isAnimating ? 'Pause' : 'Resume';
+            if (isAnimating) {
+                lastTime = performance.now();
+                animate(performance.now());
+            } else {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        function changeColor() {
+            currentColorScheme = (currentColorScheme + 1) % colorSchemes.length;
+            particles.forEach(particle => {
+                particle.color = colorSchemes[currentColorScheme][Math.floor(Math.random() * colorSchemes[currentColorScheme].length)];
+            });
+        }
+
+        // Event listeners
+        speedSlider.addEventListener('input', () => {});
+        particlesSlider.addEventListener('input', initParticles);
+        sizeSlider.addEventListener('input', () => {});
+
+        // Initialize
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        animate(performance.now());
+    </script>
+</body>
+</html>

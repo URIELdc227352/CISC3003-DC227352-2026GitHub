@@ -1,0 +1,134 @@
+<html>
+<head>
+    <title>Circle Math Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .circle-container {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: gray;
+        }
+        .circle.active {
+            background-color: green;
+        }
+        #question-box {
+            margin: 20px auto;
+            width: 300px;
+            padding: 10px;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+            background-color: #F0F8FF;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+    <script>
+        let circles = [false, false, false, false, false, false]; // 圆圈的状态
+        let litCircles = new Set();
+
+        function generateQuestion() {
+            const num1 = Math.floor(Math.random() * 90) + 10;
+            const num2 = Math.floor(Math.random() * 90) + 10;
+            document.getElementById("question-box").textContent = `${num1} + ${num2} = ?`;
+            return num1 + num2;
+        }
+
+        // 修改：延迟初始化 correctAnswer
+        let correctAnswer;
+        // 移除原先的立即调用
+        // let correctAnswer = generateQuestion();
+
+        function resetCircles() {
+            circles = circles.map(() => false);
+            litCircles.clear();
+            updateCircles();
+        }
+
+        function updateCircles() {
+            const circleElements = document.getElementsByClassName("circle");
+            for (let i = 0; i < circles.length; i++) {
+                circleElements[i].classList.toggle("active", circles[i]);
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById("answer").value, 10);
+            if (userAnswer === correctAnswer) {
+                let lightCount = 0;
+                while (lightCount < 2) {
+                    const index = Math.floor(Math.random() * 6);
+                    if (!circles[index]) {
+                        circles[index] = true;
+                        litCircles.add(index);
+                        lightCount++;
+                    } else {
+                        resetCircles();
+                        alert("Game over! A circle was double-lit.");
+                        correctAnswer = generateQuestion(); // 刷新题目
+                        return;
+                    }
+                }
+                if (litCircles.size === circles.length) {
+                    alert("Congratulations! All circles are lit!");
+                    resetCircles();
+                } else {
+                    updateCircles();
+                    correctAnswer = generateQuestion();
+                }
+            } else {
+                alert("Incorrect! Try again.");
+                correctAnswer = generateQuestion();
+            }
+            document.getElementById("answer").value = "";
+        }
+
+        // 延迟初始化数学题，确保 DOM 加载完成后再执行
+        window.onload = function() {
+            correctAnswer = generateQuestion();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Circle Math Game</h1>
+        <p>Answer math questions to light up all six circles!</p>
+    </header>
+    <section id="game">
+        <h2>Game</h2>
+        <div class="circle-container">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <div id="question-box"></div>
+        <input type="number" id="answer" placeholder="Enter your answer">
+        <button onclick="checkAnswer()">Submit</button>
+    </section>
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <form>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name"><br><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email"><br><br>
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" rows="4"></textarea><br><br>
+            <button type="submit">Send</button>
+        </form>
+    </section>
+</body>
+</html>
