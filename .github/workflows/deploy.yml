@@ -1,4 +1,4 @@
-name: 部署静态网站到 GitHub Pages
+name: 部署网站预览到 GitHub Pages
 
 on:
   push:
@@ -30,7 +30,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './CISC3003-PairAssgn-2026APR02'
+          # 修改这里：指向根目录，包含 Paper02A, Paper02B, Paper02C
+          path: './' 
 
       - name: Deploy
         id: deployment
