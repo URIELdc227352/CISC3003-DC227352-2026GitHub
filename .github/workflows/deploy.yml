@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # 修改这里：指向根目录，包含 Paper02A, Paper02B, Paper02C
-          path: './' 
+          path: './CISC3003-FinalExam-Paper02A' 
 
       - name: Deploy
         id: deployment
